@@ -6,7 +6,23 @@
         xmlns:local="clr-namespace:TaskMngr"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="0">
+        <DatePicker x:Name="datePicker" Margin="125,108,0,0" RenderTransformOrigin="2.159,-3.649" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+        <StackPanel Margin="25,25,0,0" Height="111" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
+            <Label x:Name="label" Content="Zadanie:"/>
+            <Label x:Name="label1" Content="Priorytet"/>
+            <Label x:Name="label2" Content="Status"/>
+            <Label x:Name="label3" Content="Data"/>
+        </StackPanel>
+        <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="23" Margin="125,25,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="125,53,0,0" VerticalAlignment="Top" Width="120">
+        </ComboBox>
+        <ComboBox x:Name="comboBox1" HorizontalAlignment="Left" Margin="125,80,0,0" VerticalAlignment="Top" Width="120">
+        </ComboBox>
+        <Button x:Name="button" Content="Zapisz zadanie" Margin="164,137,0,0" RenderTransformOrigin="2.181,0.936" HorizontalAlignment="Left" Width="81" Height="20" VerticalAlignment="Top" Click="Button_Click"/>
+        <ScrollViewer x:Name="scroll" Margin="269,25,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch">
+            <StackPanel x:Name="StackPanelV" ScrollViewer.CanContentScroll="True" Width="506"/>
+        </ScrollViewer>
+
     </Grid>
 </Window>

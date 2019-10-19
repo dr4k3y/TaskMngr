@@ -170,6 +170,8 @@ namespace TaskMngr
                 nameTextBox.Width = stackPanel.Width / 5;
                 nameTextBox.HorizontalAlignment = HorizontalAlignment.Stretch;
                 nameTextBox.Text = task.TaskName;
+                nameTextBox.Name = "N" + task.Id.ToString();
+                nameTextBox.LostFocus += new RoutedEventHandler(OnTextChange);
                 ComboBox priorityComboBox = new ComboBox();
                 priorityComboBox.Name = "P" + task.Id.ToString();
                 priorityComboBox.DropDownClosed += new EventHandler(OnDropDownClose_Priority);
@@ -203,6 +205,38 @@ namespace TaskMngr
                 stackPanel.Children.Add(datePickerBox);
                 StackPanelV.Children.Add(stackPanel);
             }
+        }
+
+        private void OnTextChange(object sender, EventArgs e)
+        {
+            try
+            {
+
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = DataSource;
+                builder.UserID = Login;
+                builder.Password = Password;
+                builder.InitialCatalog = Database;
+
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand();
+                    command.Connection = connection;
+                    command.CommandText = "update Tasks set TaskName=@TaskName where id=@ID";
+                    command.Parameters.Add(new SqlParameter("@ID", ((TextBox)sender).Name.Substring(1)));
+                    command.Parameters.Add(new SqlParameter("@TaskName", ((TextBox)sender).Text));
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            catch (SqlException er)
+            {
+                MessageBox.Show(er.ToString());
+            }
+            SQL_connect(comboBox2.SelectedIndex);
+            Show_Tasks(Tasks);
         }
 
         private void OnDropDownClose_Priority(object sender, EventArgs e)

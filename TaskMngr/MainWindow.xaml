@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskMngr"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="TaskMngr" Height="450" Width="800" ResizeMode="NoResize">
     <Grid Margin="0">
         <DatePicker x:Name="datePicker" Margin="125,108,0,0" RenderTransformOrigin="2.159,-3.649" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
         <StackPanel Margin="25,25,0,0" Height="111" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">

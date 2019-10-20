@@ -33,34 +33,35 @@ namespace TaskMngr
         public MainWindow()
         {
             InitializeComponent();
-            FetchData(comboBox2.SelectedIndex);
+            FetchData(orderSelector.SelectedIndex);
             datePicker.SelectedDate = DateTime.Now;
-            comboBox.Items.Insert(0, "Wysoki");
-            comboBox.Items.Insert(1, "Normalny");
-            comboBox.Items.Insert(2, "Niski");
-            comboBox.SelectedIndex = 1;
-            comboBox1.Items.Insert(0, "Nowy");
-            comboBox1.Items.Insert(1, "W realizacji");
-            comboBox1.Items.Insert(2, "Zakończony");
-            comboBox1.SelectedIndex = 0;
-            comboBox2.Items.Insert(0, "Od najnowszego");
-            comboBox2.Items.Insert(1, "Od najstarszego");
-            comboBox2.Items.Insert(2, "Wg terminu rosnąco");
-            comboBox2.Items.Insert(3, "Wg terminu malejąco");
+            prioritySelectorComboBox.Items.Insert(0, "Wysoki");
+            prioritySelectorComboBox.Items.Insert(1, "Normalny");
+            prioritySelectorComboBox.Items.Insert(2, "Niski");
+            prioritySelectorComboBox.SelectedIndex = 1;
+            statusSelectorComboBox.Items.Insert(0, "Nowy");
+            statusSelectorComboBox.Items.Insert(1, "W realizacji");
+            statusSelectorComboBox.Items.Insert(2, "Zakończony");
+            statusSelectorComboBox.SelectedIndex = 0;
+            orderSelector.Items.Insert(0, "Od najnowszego");
+            orderSelector.Items.Insert(1, "Od najstarszego");
+            orderSelector.Items.Insert(2, "Wg terminu rosnąco");
+            orderSelector.Items.Insert(3, "Wg terminu malejąco");
             Show_Tasks();
-            comboBox2.SelectedIndex = 0;
-            checkBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox1.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox2.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox3.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox4.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox5.Unchecked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox.Checked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox1.Checked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox2.Checked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox3.Checked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox4.Checked += new RoutedEventHandler(CheckBox_Checked);
-            checkBox5.Checked += new RoutedEventHandler(CheckBox_Checked);
+            orderSelector.SelectedIndex = 0;
+            orderSelector.SelectionChanged += new SelectionChangedEventHandler(ComboBox2_SelectionChanged);
+            filterHighPriorityCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterNormalPriorityCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterLowPriorityCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterNewTaskCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterInProgressTaskCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterFinishedTaskCheckBox.Unchecked += new RoutedEventHandler(CheckBox_Checked);
+            filterHighPriorityCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
+            filterNormalPriorityCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
+            filterLowPriorityCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
+            filterNewTaskCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
+            filterInProgressTaskCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
+            filterFinishedTaskCheckBox.Checked += new RoutedEventHandler(CheckBox_Checked);
         }
 
         private void FetchData(int order)
@@ -77,9 +78,9 @@ namespace TaskMngr
                         CommandText = "select * from Tasks where (Priority in (@Wysoki, @Normalny, @Niski) and Status in (@Nowy, @W_realizacji, @Zakończony)) order by case when @OrderMode = 0 then [Id] end desc, case when @OrderMode = 1 then [Id] end, case when @OrderMode = 2 then [Date] end, case when @OrderMode = 3 then [Date] end desc"
                     };
                     command.Parameters.Add(new SqlParameter("@OrderMode", order));
-                    if ((bool)checkBox.IsChecked | (bool)checkBox1.IsChecked | (bool)checkBox2.IsChecked)
+                    if ((bool)filterHighPriorityCheckBox.IsChecked | (bool)filterNormalPriorityCheckBox.IsChecked | (bool)filterLowPriorityCheckBox.IsChecked)
                     {
-                        if (checkBox.IsChecked == true)
+                        if (filterHighPriorityCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@Wysoki", "Wysoki"));
                         }
@@ -87,7 +88,7 @@ namespace TaskMngr
                         {
                             command.Parameters.Add(new SqlParameter("@Wysoki", "NULL"));
                         }
-                        if (checkBox1.IsChecked == true)
+                        if (filterNormalPriorityCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@Normalny", "Normalny"));
                         }
@@ -95,7 +96,7 @@ namespace TaskMngr
                         {
                             command.Parameters.Add(new SqlParameter("@Normalny", "NULL"));
                         }
-                        if (checkBox2.IsChecked == true)
+                        if (filterLowPriorityCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@Niski", "Niski"));
                         }
@@ -110,9 +111,9 @@ namespace TaskMngr
                         command.Parameters.Add(new SqlParameter("@Normalny", "Normalny"));
                         command.Parameters.Add(new SqlParameter("@Niski", "Niski"));
                     }
-                    if ((bool)checkBox3.IsChecked | (bool)checkBox4.IsChecked | (bool)checkBox5.IsChecked)
+                    if ((bool)filterNewTaskCheckBox.IsChecked | (bool)filterInProgressTaskCheckBox.IsChecked | (bool)filterFinishedTaskCheckBox.IsChecked)
                     {
-                        if (checkBox3.IsChecked == true)
+                        if (filterNewTaskCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@Nowy", "Nowy"));
                         }
@@ -120,7 +121,7 @@ namespace TaskMngr
                         {
                             command.Parameters.Add(new SqlParameter("@Nowy", "NULL"));
                         }
-                        if (checkBox4.IsChecked == true)
+                        if (filterInProgressTaskCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@W_realizacji", "W realizacji"));
                         }
@@ -128,7 +129,7 @@ namespace TaskMngr
                         {
                             command.Parameters.Add(new SqlParameter("@W_realizacji", "NULL"));
                         }
-                        if (checkBox5.IsChecked == true)
+                        if (filterFinishedTaskCheckBox.IsChecked == true)
                         {
                             command.Parameters.Add(new SqlParameter("@Zakończony", "Zakończony"));
                         }
@@ -355,10 +356,10 @@ namespace TaskMngr
                         Connection = connection,
                         CommandText = "insert into Tasks values (@TaskName, @Priority, @Date, @Status)"
                     };
-                    command.Parameters.Add(new SqlParameter("@TaskName", textBox2.Text));
-                    command.Parameters.Add(new SqlParameter("@Priority", comboBox.SelectedValue.ToString()));
+                    command.Parameters.Add(new SqlParameter("@TaskName", taskNameInputTextBox.Text));
+                    command.Parameters.Add(new SqlParameter("@Priority", prioritySelectorComboBox.SelectedValue.ToString()));
                     command.Parameters.Add(new SqlParameter("@Date", datePicker.SelectedDate.Value.ToString("yyyy-MM-dd")));
-                    command.Parameters.Add(new SqlParameter("@Status", comboBox1.SelectedValue.ToString()));
+                    command.Parameters.Add(new SqlParameter("@Status", statusSelectorComboBox.SelectedValue.ToString()));
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
@@ -367,7 +368,7 @@ namespace TaskMngr
             {
                 MessageBox.Show(er.ToString());
             }
-            FetchData(comboBox2.SelectedIndex);
+            FetchData(orderSelector.SelectedIndex);
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             StackPanelV.Children.Clear();
@@ -442,7 +443,7 @@ namespace TaskMngr
 
         private void ComboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FetchData(comboBox2.SelectedIndex);
+            FetchData(orderSelector.SelectedIndex);
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             StackPanelV.Children.Clear();
@@ -454,7 +455,7 @@ namespace TaskMngr
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            FetchData(comboBox2.SelectedIndex);
+            FetchData(orderSelector.SelectedIndex);
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             for (int i = 0; i<TasksCopy.Length; i++)
@@ -475,5 +476,6 @@ namespace TaskMngr
                 StackPanelV.Children.Add(sp);
             }
         }
+
     }
 }

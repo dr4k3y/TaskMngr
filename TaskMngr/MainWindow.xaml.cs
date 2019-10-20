@@ -17,24 +17,21 @@ using System.Data.SqlClient;
 
 namespace TaskMngr
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         List<Task> Tasks;
         SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
         {
-            DataSource = @"localhost\SQLEXPRESS",
-            UserID = "Adam_DB",
-            Password = "Password_1",
-            InitialCatalog = "TasksDb"
+            DataSource = @"localhost\SQLEXPRESS",   //do zmiany
+            UserID = "Adam_DB",                     //do zmiany
+            Password = "Password_1",                //do zmiany
+            InitialCatalog = "TasksDb"              //do zmiany
         };
         public MainWindow()
         {
             WindowInitialization();
         }
-        //ok
+        /* Funkcja pobierająca dane z serwera w sposób określony przez użytkownika poprzez UI */
         private void FetchData(int order)
         {
             Tasks = new List<Task>();
@@ -63,7 +60,7 @@ namespace TaskMngr
                 MessageBox.Show(e.ToString());
             }
         }
-        //ok
+        /* Funkcja ustalająca parametry w zapytaniu wysylanym przez FetchData() odpowiedzialne za filtrowanie wyników */
         private void AddFilterParametersTo(SqlCommand command)
         {
             if ((bool)filterHighPriorityCheckBox.IsChecked | (bool)filterNormalPriorityCheckBox.IsChecked | (bool)filterLowPriorityCheckBox.IsChecked)
@@ -133,7 +130,7 @@ namespace TaskMngr
                 command.Parameters.Add(new SqlParameter("@Zakończony", "Zakończony"));
             }
         }
-        //ok
+        /* Funkcja wyswietlająca panele odpowiedzialne za edycje i prezentacje zadań */
         private void ShowTasks()
         {
             StackPanelV.Children.Clear();
@@ -142,7 +139,7 @@ namespace TaskMngr
                 CreateTaskControlPanel(task);
             }
         }
-        //ok
+        /* Funkcja tworząca panel kontrolny dla każdego zadania */
         private void CreateTaskControlPanel(Task task)
         {
             StackPanel stackPanel = new StackPanel
@@ -202,7 +199,7 @@ namespace TaskMngr
             stackPanel.Children.Add(datePickerBox);
             StackPanelV.Children.Add(stackPanel);
         }
-        //ok
+        /* EventHandler edytujący nazwę odpowiedniego zadania w bazie danych i na ekranie */
         private void OnTextChange(object sender, EventArgs e)
         {
             try
@@ -226,7 +223,7 @@ namespace TaskMngr
                 MessageBox.Show(er.ToString());
             }
         }
-        //ok
+        /* EventHandler edytujący priorytet odpowiedniego zadania w bazie danych i na ekranie */
         private void OnDropDownClose_Priority(object sender, EventArgs e)
         {
             try
@@ -250,7 +247,7 @@ namespace TaskMngr
                 MessageBox.Show(er.ToString());
             }
         }
-        //ok
+        /* EventHandler edytujący termin odpowiedniego zadania w bazie danych i na ekranie */
         private void OnDateChange(object sender, EventArgs e)
         {
             try
@@ -274,7 +271,7 @@ namespace TaskMngr
                 MessageBox.Show(er.ToString());
             }
         }
-        //ok
+        /* EventHandler edytujący status odpowiedniego zadania w bazie danych i na ekranie */
         private void OnDropDownClose_Status(object sender, EventArgs e)
         {
             try
@@ -298,7 +295,7 @@ namespace TaskMngr
                 MessageBox.Show(er.ToString());
             }
         }
-        //ok
+        /* EventHandler usuwający odpowiednie zadanie z bazy i z ekranu */
         private void OnDeleteButtonClick(object sender, RoutedEventArgs e)
         {
             try
@@ -324,7 +321,7 @@ namespace TaskMngr
             StackPanelV.Children.Remove((StackPanel)FindName(TargetName));
             UnregisterName(TargetName);
         }
-        //ok
+        /* EventHandler dodający zadanie do bazy danych i wyświetlający je na ekranie po wciśnieciu przycisku saveTaskButton */
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
             try
@@ -366,7 +363,7 @@ namespace TaskMngr
                 }
             }
         }
-        //ok
+        /* EventHandler odpowiadający za zmiane sposobu sortowania po dokonaniu wyboru przez użytkownika */
         private void OrderSelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FetchData(orderSelector.SelectedIndex);
@@ -379,13 +376,13 @@ namespace TaskMngr
                 StackPanelV.Children.Add(Array.Find(TasksCopy, Task => Task.Name == TargetName));
             }
         }
-        //ok
+        /* EventHandler odpowiadający za zmiane sposobu filtrowania po dokonaniu wyboru przez użytkownika */
         private void FilterCheckBoxChecked(object sender, RoutedEventArgs e)
         {
             FetchData(orderSelector.SelectedIndex);
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
-            for (int i = 0; i<TasksCopy.Length; i++)
+            for (int i = 0; i < TasksCopy.Length; i++)
             {
                 TasksCopy[i].Visibility = Visibility.Collapsed;
             }
@@ -394,7 +391,7 @@ namespace TaskMngr
                 string TargetName = "SN" + task.Id;
                 if (Array.Find(TasksCopy, Task => Task.Name == TargetName) != null)
                 {
-                    (Array.Find(TasksCopy, Task => Task.Name == TargetName)).Visibility=Visibility.Visible;
+                    (Array.Find(TasksCopy, Task => Task.Name == TargetName)).Visibility = Visibility.Visible;
                 }
             }
             StackPanelV.Children.Clear();
@@ -403,7 +400,7 @@ namespace TaskMngr
                 StackPanelV.Children.Add(sp);
             }
         }
-        //ok
+        /* Funkcja inicjalizująca statyczne kontrolki i wyświetlająca zadania w domyślny sposób po otworzeniu aplikacji */
         private void WindowInitialization()
         {
             InitializeComponent();

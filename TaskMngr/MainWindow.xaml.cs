@@ -32,7 +32,7 @@ namespace TaskMngr
             WindowInitialization();
         }
         /* Funkcja pobierająca dane z serwera w sposób określony przez użytkownika poprzez UI */
-        private void FetchData(int order)
+        private void FetchData()
         {
             Tasks = new List<Task>();
             try
@@ -45,14 +45,13 @@ namespace TaskMngr
                         Connection = connection,
                         CommandText = "select * from Tasks where (Priority in (@Wysoki, @Normalny, @Niski) and Status in (@Nowy, @W_realizacji, @Zakończony)) order by case when @OrderMode = 0 then [Id] end desc, case when @OrderMode = 1 then [Id] end, case when @OrderMode = 2 then [Date] end, case when @OrderMode = 3 then [Date] end desc"
                     };
-                    command.Parameters.Add(new SqlParameter("@OrderMode", order));
+                    command.Parameters.Add(new SqlParameter("@OrderMode", orderSelector.SelectedIndex));
                     AddFilterParametersTo(command);
                     SqlDataReader read = command.ExecuteReader();
                     while (read.Read())
                     {
                         Tasks.Add(new Task(read));
                     }
-                    connection.Close();
                 }
             }
             catch (SqlException e)
@@ -215,7 +214,6 @@ namespace TaskMngr
                     command.Parameters.Add(new SqlParameter("@ID", ((TextBox)sender).Name.Substring(1)));
                     command.Parameters.Add(new SqlParameter("@TaskName", ((TextBox)sender).Text));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
@@ -239,7 +237,6 @@ namespace TaskMngr
                     command.Parameters.Add(new SqlParameter("@ID", ((ComboBox)sender).Name.Substring(1)));
                     command.Parameters.Add(new SqlParameter("@Priority", ((ComboBox)sender).SelectedValue.ToString()));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
@@ -263,7 +260,6 @@ namespace TaskMngr
                     command.Parameters.Add(new SqlParameter("@ID", ((DatePicker)sender).Name.Substring(2)));
                     command.Parameters.Add(new SqlParameter("@Date", ((DatePicker)sender).SelectedDate.Value.ToString("yyyy-MM-dd")));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
@@ -287,7 +283,6 @@ namespace TaskMngr
                     command.Parameters.Add(new SqlParameter("@ID", ((ComboBox)sender).Name.Substring(1)));
                     command.Parameters.Add(new SqlParameter("@Status", ((ComboBox)sender).SelectedValue.ToString()));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
@@ -310,7 +305,6 @@ namespace TaskMngr
                     };
                     command.Parameters.Add(new SqlParameter("@ID", ((Button)sender).Name.Substring(1)));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
@@ -339,14 +333,13 @@ namespace TaskMngr
                     command.Parameters.Add(new SqlParameter("@Date", datePicker.SelectedDate.Value.ToString("yyyy-MM-dd")));
                     command.Parameters.Add(new SqlParameter("@Status", statusSelectorComboBox.SelectedValue.ToString()));
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
             catch (SqlException er)
             {
                 MessageBox.Show(er.ToString());
             }
-            FetchData(orderSelector.SelectedIndex);
+            FetchData();
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             StackPanelV.Children.Clear();
@@ -363,10 +356,10 @@ namespace TaskMngr
                 }
             }
         }
-        /* EventHandler odpowiadający za zmiane sposobu sortowania po dokonaniu wyboru przez użytkownika */
+        /* EventHandler wymuszający pobranie danych posortowanych w sposob okreslony przez użytkownika */
         private void OrderSelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FetchData(orderSelector.SelectedIndex);
+            FetchData();
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             StackPanelV.Children.Clear();
@@ -376,10 +369,10 @@ namespace TaskMngr
                 StackPanelV.Children.Add(Array.Find(TasksCopy, Task => Task.Name == TargetName));
             }
         }
-        /* EventHandler odpowiadający za zmiane sposobu filtrowania po dokonaniu wyboru przez użytkownika */
+        /* EventHandler wymuszający pobranie danych przefiltrowanych w sposob okreslony przez użytkownika */
         private void FilterCheckBoxChecked(object sender, RoutedEventArgs e)
         {
-            FetchData(orderSelector.SelectedIndex);
+            FetchData();
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             for (int i = 0; i < TasksCopy.Length; i++)
@@ -404,7 +397,7 @@ namespace TaskMngr
         private void WindowInitialization()
         {
             InitializeComponent();
-            FetchData(orderSelector.SelectedIndex);
+            FetchData();
             datePicker.SelectedDate = DateTime.Now;
             prioritySelectorComboBox.Items.Insert(0, "Wysoki");
             prioritySelectorComboBox.Items.Insert(1, "Normalny");

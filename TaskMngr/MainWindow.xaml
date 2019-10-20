@@ -19,19 +19,19 @@
         </ComboBox>
         <ComboBox x:Name="statusSelectorComboBox" HorizontalAlignment="Left" Margin="125,80,0,0" VerticalAlignment="Top" Width="120">
         </ComboBox>
-        <Button x:Name="saveTaskButton" Content="Zapisz zadanie" Margin="164,137,0,0" RenderTransformOrigin="2.181,0.936" HorizontalAlignment="Left" Width="81" Height="20" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button x:Name="saveTaskButton" Content="Zapisz zadanie" Margin="164,137,0,0" RenderTransformOrigin="2.181,0.936" HorizontalAlignment="Left" Width="81" Height="20" VerticalAlignment="Top" Click="AddButtonClick"/>
         <ScrollViewer x:Name="scroll" Margin="269,25,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch">
             <StackPanel x:Name="StackPanelV" ScrollViewer.CanContentScroll="True" Width="506"/>
         </ScrollViewer>
-        <ComboBox x:Name="orderSelector" HorizontalAlignment="Left" Margin="25,223,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="orderSelector" HorizontalAlignment="Left" Margin="25,223,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="OrderSelectorSelectionChanged"/>
         <Label x:Name="orderSelectorLabel" Content="Sortuj według" HorizontalAlignment="Left" Margin="25,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.257,-0.317"/>
         <Label x:Name="filterCheckBoxesLabel" Content="Filtruj:" HorizontalAlignment="Left" Margin="25,245,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.257,-0.317"/>
-        <CheckBox x:Name="filterHighPriorityCheckBox" Content="Priorytet wysoki" HorizontalAlignment="Left" Margin="25,271,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
-        <CheckBox x:Name="filterNormalPriorityCheckBox" Content="Priorytet normalny" HorizontalAlignment="Left" Margin="25,291,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="filterLowPriorityCheckBox" Content="Priorytet niski" HorizontalAlignment="Left" Margin="25,311,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="filterNewTaskCheckBox" Content="Nowe zadanie" HorizontalAlignment="Left" Margin="25,331,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="filterInProgressTaskCheckBox" Content="Zadanie w realizacji" HorizontalAlignment="Left" Margin="25,351,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="filterFinishedTaskCheckBox" Content="Zadanie zakończone" HorizontalAlignment="Left" Margin="25,371,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="filterHighPriorityCheckBox" Content="Priorytet wysoki" HorizontalAlignment="Left" Margin="25,271,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
+        <CheckBox x:Name="filterNormalPriorityCheckBox" Content="Priorytet normalny" HorizontalAlignment="Left" Margin="25,291,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
+        <CheckBox x:Name="filterLowPriorityCheckBox" Content="Priorytet niski" HorizontalAlignment="Left" Margin="25,311,0,0" VerticalAlignment="Top" Unchecked="FilterCheckBoxChecked" Checked="FilterCheckBoxChecked"/>
+        <CheckBox x:Name="filterNewTaskCheckBox" Content="Nowe zadanie" HorizontalAlignment="Left" Margin="25,331,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
+        <CheckBox x:Name="filterInProgressTaskCheckBox" Content="Zadanie w realizacji" HorizontalAlignment="Left" Margin="25,351,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
+        <CheckBox x:Name="filterFinishedTaskCheckBox" Content="Zadanie zakończone" HorizontalAlignment="Left" Margin="25,371,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
 
     </Grid>
 </Window>

@@ -20,7 +20,7 @@ namespace TaskMngr
         {
             WindowInitialization();
         }
-        /* Funkcja pobierająca dane z serwera w sposób określony przez użytkownika poprzez UI */
+        /* Metoda pobierająca dane z serwera w sposób określony przez użytkownika poprzez UI */
         private void FetchData()
         {
             Tasks = new List<Task>();
@@ -48,7 +48,7 @@ namespace TaskMngr
                 MessageBox.Show(e.ToString());
             }
         }
-        /* Funkcja ustalająca parametry w zapytaniu wysylanym przez FetchData() odpowiedzialne za filtrowanie wyników */
+        /* Metoda ustalająca parametry w zapytaniu wysylanym przez FetchData() odpowiedzialne za filtrowanie wyników */
         private void AddFilterParametersTo(SqlCommand command)
         {
             if ((bool)filterHighPriorityCheckBox.IsChecked | (bool)filterNormalPriorityCheckBox.IsChecked | (bool)filterLowPriorityCheckBox.IsChecked)
@@ -118,7 +118,7 @@ namespace TaskMngr
                 command.Parameters.Add(new SqlParameter("@Zakończony", "Zakończony"));
             }
         }
-        /* Funkcja wyswietlająca panele odpowiedzialne za edycje i prezentacje zadań */
+        /* Metoda wyswietlająca panele odpowiedzialne za edycje i prezentacje zadań */
         private void ShowTasks()
         {
             StackPanelV.Children.Clear();
@@ -127,7 +127,7 @@ namespace TaskMngr
                 CreateTaskControlPanel(task);
             }
         }
-        /* Funkcja tworząca panel kontrolny dla każdego zadania */
+        /* Metoda tworząca panel kontrolny dla każdego zadania */
         private void CreateTaskControlPanel(Task task)
         {
             StackPanel stackPanel = new StackPanel

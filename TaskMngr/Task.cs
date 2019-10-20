@@ -24,6 +24,7 @@ namespace TaskMngr
             this.Date = DateTime.Parse(dataReader["Date"].ToString());
             this.Status = dataReader["Status"].ToString();
         }
+        /* Metoda przypisujaca wartość liczbową priorytetowi zadania */
         public int PriorityValue()
         {
             if (this.Priority=="Wysoki")
@@ -40,6 +41,7 @@ namespace TaskMngr
             }
             return 1;
         }
+        /* Metoda przypisujaca wartość liczbową statusowi zadania */
         public int StatusValue()
         {
             if (this.Status == "Nowy")

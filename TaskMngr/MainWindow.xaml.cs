@@ -135,7 +135,7 @@ namespace TaskMngr
                 CreateTaskControlPanel(task);
             }
         }
-        /* Metoda tworząca panel kontrolny dla każdego zadania */
+        /* Metoda tworząca panel kontrolny dla zadania */
         private void CreateTaskControlPanel(Task task)
         {
             StackPanelV.Width = scroll.MinWidth;
@@ -212,7 +212,7 @@ namespace TaskMngr
         {
             SendName(sender);
         }
-        /* Metoda wysylajaca nazwe zadania do serwera wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
+        /* Metoda wysylajaca nazwe zadania do bazy danych wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
         private void SendName(object sender)
         {
             try
@@ -357,21 +357,30 @@ namespace TaskMngr
             StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
             StackPanelV.Children.CopyTo(TasksCopy, 0);
             StackPanelV.Children.Clear();
+            for (int i = 0; i < TasksCopy.Length; i++)
+            {
+                TasksCopy[i].Visibility = Visibility.Collapsed;
+            }
             foreach (Task task in Tasks)
             {
                 string TargetName = "SN" + task.Id;
                 if (Array.Find(TasksCopy, Task => Task.Name == TargetName) != null)
                 {
-                    StackPanelV.Children.Add(Array.Find(TasksCopy, Task => Task.Name == TargetName));
+                    (Array.Find(TasksCopy, Task => Task.Name == TargetName)).Visibility = Visibility.Visible;
                 }
                 else
                 {
                     CreateTaskControlPanel(task);
                 }
             }
+            foreach (StackPanel sp in TasksCopy)
+            {
+                StackPanelV.Children.Add(sp);
+            }
             prioritySelectorComboBox.SelectedIndex = 1;
             statusSelectorComboBox.SelectedIndex = 0;
             datePicker.SelectedDate = DateTime.Now;
+            taskNameInputTextBox.Text = "";
         }
         /* EventHandler wymuszający pobranie danych posortowanych w sposob okreslony przez użytkownika */
         private void OrderSelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -430,6 +439,62 @@ namespace TaskMngr
             orderSelector.Items.Insert(3, "Wg terminu malejąco");
             ShowTasks();
             orderSelector.SelectedIndex = 0;
+        }
+        /* EventHandler resetujący filtrowanie */
+        private void FilterResetButtonClick(object sender, RoutedEventArgs e)
+        {
+            RemoveCheckBoxesEventHandlers();
+            filterFinishedTaskCheckBox.IsChecked = false;
+            filterInProgressTaskCheckBox.IsChecked = false;
+            filterNewTaskCheckBox.IsChecked = false;
+            filterHighPriorityCheckBox.IsChecked = false;
+            filterNormalPriorityCheckBox.IsChecked = false;
+            filterLowPriorityCheckBox.IsChecked = false;
+            FetchData();
+            StackPanel[] TasksCopy = new StackPanel[StackPanelV.Children.Count];
+            StackPanelV.Children.CopyTo(TasksCopy, 0);
+            StackPanelV.Children.Clear();
+            for (int i = 0; i < TasksCopy.Length; i++)
+            {
+                TasksCopy[i].Visibility = Visibility.Collapsed;
+            }
+            foreach (Task task in Tasks)
+            {
+                string TargetName = "SN" + task.Id;
+                if (Array.Find(TasksCopy, Task => Task.Name == TargetName) != null)
+                {
+                    (Array.Find(TasksCopy, Task => Task.Name == TargetName)).Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    CreateTaskControlPanel(task);
+                }
+            }
+            foreach (StackPanel sp in TasksCopy)
+            {
+                StackPanelV.Children.Add(sp);
+            }
+            AddCheckBoxesEventHandlers();
+        }
+
+        private void AddCheckBoxesEventHandlers()
+        {
+            filterFinishedTaskCheckBox.Unchecked += FilterCheckBoxChecked;
+            filterInProgressTaskCheckBox.Unchecked += FilterCheckBoxChecked;
+            filterNewTaskCheckBox.Unchecked += FilterCheckBoxChecked;
+            filterHighPriorityCheckBox.Unchecked += FilterCheckBoxChecked;
+            filterLowPriorityCheckBox.Unchecked += FilterCheckBoxChecked;
+            filterNormalPriorityCheckBox.Unchecked += FilterCheckBoxChecked;
+        }
+
+        private void RemoveCheckBoxesEventHandlers()
+        {
+            filterFinishedTaskCheckBox.Unchecked -= FilterCheckBoxChecked;
+            filterInProgressTaskCheckBox.Unchecked -= FilterCheckBoxChecked;
+            filterNewTaskCheckBox.Unchecked -= FilterCheckBoxChecked;
+            filterHighPriorityCheckBox.Unchecked -= FilterCheckBoxChecked;
+            filterLowPriorityCheckBox.Unchecked -= FilterCheckBoxChecked;
+            filterNormalPriorityCheckBox.Unchecked -= FilterCheckBoxChecked;
         }
     }
 }

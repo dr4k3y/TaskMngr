@@ -32,6 +32,7 @@
         <CheckBox x:Name="filterNewTaskCheckBox" Content="Nowe zadanie" HorizontalAlignment="Left" Margin="25,331,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
         <CheckBox x:Name="filterInProgressTaskCheckBox" Content="Zadanie w realizacji" HorizontalAlignment="Left" Margin="25,351,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
         <CheckBox x:Name="filterFinishedTaskCheckBox" Content="Zadanie zakończone" HorizontalAlignment="Left" Margin="25,371,0,0" VerticalAlignment="Top" Checked="FilterCheckBoxChecked" Unchecked="FilterCheckBoxChecked"/>
+        <Button x:Name="filterResetButton" Content="Reset filtrowania" HorizontalAlignment="Left" Margin="164,271,0,0" VerticalAlignment="Top" Width="100" Click="FilterResetButtonClick"/>
 
     </Grid>
 </Window>

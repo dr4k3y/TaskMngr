@@ -20,7 +20,7 @@ namespace TaskMngr
         SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
         {
             DataSource = @"localhost\SQLEXPRESS",   //do zmiany
-            UserID = "Adam_DB",                     //do zmiany
+            UserID = "Adam_DDB",                     //do zmiany
             Password = "Password_1",                //do zmiany
             InitialCatalog = "TasksDb"              //do zmiany
         };
@@ -212,7 +212,7 @@ namespace TaskMngr
         {
             SendName(sender);
         }
-        /* Metoda wysylajaca nazwe zadania do bazy danych wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
+        /* Metoda wysylajaca nazwe zadania do bazy danych wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter */
         private void SendName(object sender)
         {
             try

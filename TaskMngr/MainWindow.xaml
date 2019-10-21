@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskMngr"
         mc:Ignorable="d"
-        Title="TaskMngr" Height="450" Width="800" ResizeMode="NoResize">
+        Title="TaskMngr" Height="450" Width="800" MaxWidth="800" MinWidth="800" MinHeight="450">
     <Grid Margin="0">
         <DatePicker x:Name="datePicker" Margin="125,108,0,0" RenderTransformOrigin="2.159,-3.649" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
         <StackPanel Margin="25,25,0,0" Height="111" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
@@ -20,8 +20,8 @@
         <ComboBox x:Name="statusSelectorComboBox" HorizontalAlignment="Left" Margin="125,80,0,0" VerticalAlignment="Top" Width="120">
         </ComboBox>
         <Button x:Name="saveTaskButton" Content="Zapisz zadanie" Margin="164,137,0,0" RenderTransformOrigin="2.181,0.936" HorizontalAlignment="Left" Width="81" Height="20" VerticalAlignment="Top" Click="AddButtonClick"/>
-        <ScrollViewer x:Name="scroll" Margin="269,25,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch">
-            <StackPanel x:Name="StackPanelV" ScrollViewer.CanContentScroll="True" Width="506"/>
+        <ScrollViewer x:Name="scroll" Margin="269,25,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch" MinWidth="491">
+            <StackPanel x:Name="StackPanelV" ScrollViewer.CanContentScroll="True"/>
         </ScrollViewer>
         <ComboBox x:Name="orderSelector" HorizontalAlignment="Left" Margin="25,223,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="OrderSelectorSelectionChanged"/>
         <Label x:Name="orderSelectorLabel" Content="Sortuj według" HorizontalAlignment="Left" Margin="25,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.257,-0.317"/>

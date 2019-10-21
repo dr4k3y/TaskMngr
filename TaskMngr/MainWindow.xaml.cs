@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Data.SqlClient;
+using System.Windows.Input;
 
 namespace TaskMngr
 {
     public partial class MainWindow : Window
     {
+        const string HighPriorityParameterString="Wysoki";
+        const string NormalPriorityParameterString = "Normalny";
+        const string LowPriorityParameterString = "Niski";
+        const string NewStatusParameterString = "Nowy";
+        const string InProgressStatusParameterString = "W realizacji";
+        const string FinishedStatusParameterString = "Zakończony";
+        const string NullParameterString = "NULL";
         List<Task> Tasks;
         SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
         {
@@ -55,67 +63,67 @@ namespace TaskMngr
             {
                 if (filterHighPriorityCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@Wysoki", "Wysoki"));
+                    command.Parameters.Add(new SqlParameter("@Wysoki", HighPriorityParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@Wysoki", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@Wysoki", NullParameterString));
                 }
                 if (filterNormalPriorityCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@Normalny", "Normalny"));
+                    command.Parameters.Add(new SqlParameter("@Normalny", NormalPriorityParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@Normalny", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@Normalny", NullParameterString));
                 }
                 if (filterLowPriorityCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@Niski", "Niski"));
+                    command.Parameters.Add(new SqlParameter("@Niski", LowPriorityParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@Niski", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@Niski", NullParameterString));
                 }
             }
             else
             {
-                command.Parameters.Add(new SqlParameter("@Wysoki", "Wysoki"));
-                command.Parameters.Add(new SqlParameter("@Normalny", "Normalny"));
-                command.Parameters.Add(new SqlParameter("@Niski", "Niski"));
+                command.Parameters.Add(new SqlParameter("@Wysoki", HighPriorityParameterString));
+                command.Parameters.Add(new SqlParameter("@Normalny", NormalPriorityParameterString));
+                command.Parameters.Add(new SqlParameter("@Niski", LowPriorityParameterString));
             }
             if ((bool)filterNewTaskCheckBox.IsChecked | (bool)filterInProgressTaskCheckBox.IsChecked | (bool)filterFinishedTaskCheckBox.IsChecked)
             {
                 if (filterNewTaskCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@Nowy", "Nowy"));
+                    command.Parameters.Add(new SqlParameter("@Nowy", NewStatusParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@Nowy", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@Nowy", NullParameterString));
                 }
                 if (filterInProgressTaskCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@W_realizacji", "W realizacji"));
+                    command.Parameters.Add(new SqlParameter("@W_realizacji", InProgressStatusParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@W_realizacji", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@W_realizacji", NullParameterString));
                 }
                 if (filterFinishedTaskCheckBox.IsChecked == true)
                 {
-                    command.Parameters.Add(new SqlParameter("@Zakończony", "Zakończony"));
+                    command.Parameters.Add(new SqlParameter("@Zakończony", FinishedStatusParameterString));
                 }
                 else
                 {
-                    command.Parameters.Add(new SqlParameter("@Zakończony", "NULL"));
+                    command.Parameters.Add(new SqlParameter("@Zakończony", NullParameterString));
                 }
             }
             else
             {
-                command.Parameters.Add(new SqlParameter("@Nowy", "Nowy"));
-                command.Parameters.Add(new SqlParameter("@W_realizacji", "W realizacji"));
-                command.Parameters.Add(new SqlParameter("@Zakończony", "Zakończony"));
+                command.Parameters.Add(new SqlParameter("@Nowy", NewStatusParameterString));
+                command.Parameters.Add(new SqlParameter("@W_realizacji", InProgressStatusParameterString));
+                command.Parameters.Add(new SqlParameter("@Zakończony", FinishedStatusParameterString));
             }
         }
         /* Metoda wyswietlająca panele odpowiedzialne za edycje i prezentacje zadań */
@@ -130,10 +138,12 @@ namespace TaskMngr
         /* Metoda tworząca panel kontrolny dla każdego zadania */
         private void CreateTaskControlPanel(Task task)
         {
+            StackPanelV.Width = scroll.MinWidth;
             StackPanel stackPanel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Top,
                 Width = StackPanelV.Width,
                 Name = "SN" + task.Id.ToString()
             };
@@ -145,7 +155,8 @@ namespace TaskMngr
                 Text = task.TaskName,
                 Name = "N" + task.Id.ToString()
             };
-            nameTextBox.LostFocus += new RoutedEventHandler(OnTextChange);
+            nameTextBox.KeyDown += new KeyEventHandler(OnTextChangeEnter);
+            nameTextBox.LostFocus += new RoutedEventHandler(OnTextChangeLostFocus);
             ComboBox priorityComboBox = new ComboBox
             {
                 Name = "P" + task.Id.ToString()
@@ -158,13 +169,13 @@ namespace TaskMngr
             statusComboBox.DropDownClosed += new EventHandler(OnDropDownClose_Status);
             priorityComboBox.Width = stackPanel.Width / 5;
             statusComboBox.Width = stackPanel.Width / 5;
-            priorityComboBox.Items.Insert(0, "Wysoki");
-            priorityComboBox.Items.Insert(1, "Normalny");
-            priorityComboBox.Items.Insert(2, "Niski");
+            priorityComboBox.Items.Insert(0, HighPriorityParameterString);
+            priorityComboBox.Items.Insert(1, NormalPriorityParameterString);
+            priorityComboBox.Items.Insert(2, LowPriorityParameterString);
             priorityComboBox.SelectedIndex = task.PriorityValue();
-            statusComboBox.Items.Insert(0, "Nowy");
-            statusComboBox.Items.Insert(1, "W realizacji");
-            statusComboBox.Items.Insert(2, "Zakończony");
+            statusComboBox.Items.Insert(0, NewStatusParameterString);
+            statusComboBox.Items.Insert(1, InProgressStatusParameterString);
+            statusComboBox.Items.Insert(2, FinishedStatusParameterString);
             statusComboBox.SelectedIndex = task.StatusValue();
             DatePicker datePickerBox = new DatePicker
             {
@@ -187,8 +198,22 @@ namespace TaskMngr
             stackPanel.Children.Add(datePickerBox);
             StackPanelV.Children.Add(stackPanel);
         }
-        /* EventHandler edytujący nazwę odpowiedniego zadania w bazie danych i na ekranie */
-        private void OnTextChange(object sender, EventArgs e)
+        /* EventHandler edytujący nazwę odpowiedniego zadania w bazie danych i na ekranie po naciśnięciu Enter */
+        private void OnTextChangeEnter(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SendName(sender);
+                taskNameInputTextBox.Focus();
+            }
+        }
+        /* EventHandler edytujący nazwę odpowiedniego zadania w bazie danych i na ekranie po utraceniu focusu prze pole tekstowe */
+        private void OnTextChangeLostFocus(object sender, RoutedEventArgs e)
+        {
+            SendName(sender);
+        }
+        /* Funkcja wysylajaca nazwe zadania do serwera wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
+        private void SendName(object sender)
         {
             try
             {
@@ -344,6 +369,9 @@ namespace TaskMngr
                     CreateTaskControlPanel(task);
                 }
             }
+            prioritySelectorComboBox.SelectedIndex = 1;
+            statusSelectorComboBox.SelectedIndex = 0;
+            datePicker.SelectedDate = DateTime.Now;
         }
         /* EventHandler wymuszający pobranie danych posortowanych w sposob okreslony przez użytkownika */
         private void OrderSelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -388,13 +416,13 @@ namespace TaskMngr
             InitializeComponent();
             FetchData();
             datePicker.SelectedDate = DateTime.Now;
-            prioritySelectorComboBox.Items.Insert(0, "Wysoki");
-            prioritySelectorComboBox.Items.Insert(1, "Normalny");
-            prioritySelectorComboBox.Items.Insert(2, "Niski");
+            prioritySelectorComboBox.Items.Insert(0, HighPriorityParameterString);
+            prioritySelectorComboBox.Items.Insert(1, NormalPriorityParameterString);
+            prioritySelectorComboBox.Items.Insert(2, LowPriorityParameterString);
             prioritySelectorComboBox.SelectedIndex = 1;
-            statusSelectorComboBox.Items.Insert(0, "Nowy");
-            statusSelectorComboBox.Items.Insert(1, "W realizacji");
-            statusSelectorComboBox.Items.Insert(2, "Zakończony");
+            statusSelectorComboBox.Items.Insert(0, NewStatusParameterString);
+            statusSelectorComboBox.Items.Insert(1, InProgressStatusParameterString);
+            statusSelectorComboBox.Items.Insert(2, FinishedStatusParameterString);
             statusSelectorComboBox.SelectedIndex = 0;
             orderSelector.Items.Insert(0, "Od najnowszego");
             orderSelector.Items.Insert(1, "Od najstarszego");

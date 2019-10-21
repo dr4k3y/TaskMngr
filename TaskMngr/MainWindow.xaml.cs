@@ -20,7 +20,7 @@ namespace TaskMngr
         SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
         {
             DataSource = @"localhost\SQLEXPRESS",   //do zmiany
-            UserID = "Adam_DDB",                     //do zmiany
+            UserID = "Adam_DB",                     //do zmiany
             Password = "Password_1",                //do zmiany
             InitialCatalog = "TasksDb"              //do zmiany
         };

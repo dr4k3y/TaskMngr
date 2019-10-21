@@ -212,7 +212,7 @@ namespace TaskMngr
         {
             SendName(sender);
         }
-        /* Funkcja wysylajaca nazwe zadania do serwera wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
+        /* Metoda wysylajaca nazwe zadania do serwera wywoływana w EventHandlerach OnTextChangeLostFocus i OnTextChangeEnter  */
         private void SendName(object sender)
         {
             try
